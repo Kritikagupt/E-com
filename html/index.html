@@ -197,11 +197,58 @@ for (let i = 0; i < slideCount; i++) {
   const b = document.createElement('button');
   b.className = 'dot';
   b.addEventListener('click', () => goTo(i));
-  dotsWrap.append(b);
+  dotsWrap.appendChild(b);
 }
 
 // Initialize
 goTo(0);
+
+let products=[];
+let filteredProducts =[];
+
+async function fetchData() {
+  try{
+    let res = await fetch('');
+    if(!res.ok) throw new Error('HTTp error! Status : ${res.status}');
+
+    let data = await re.json()
+    products = data;
+    filteredProducts = [...products];
+    createFilterButtons()
+    displayProducts(filteredProducts);
+
+  }
+  catch (error){
+    console.log(error);
+  }
+}
+
+function createFilterButtons(){
+
+  const filtersContainer = document.getElementById("filters")
+  filtersContainer.innerHTML = " ";
+
+  const categories = ["All", ...new Set(products.map((p) => p.category))];
+
+  categories.forEach((cat) => {
+    const btn = document.createElement("button")
+    btn.className = "filter-btn";
+    btn.textContent = cat;
+    if(cat ---"All") btn.classList.add("active");
+
+    btn.addEventListener('click', () =>{
+      document.querySelectorAll(".filter-btn")
+      .forEach((b)=> b.classList.remove("active"));
+      btn.classList.add("active");
+
+      filteredProducts = cat === "All" ?
+       [...products] :
+        products.filter((p)=> p.category === cat);
+
+    });
+  });
+}
+
 </script>
 </body>
 </html>
